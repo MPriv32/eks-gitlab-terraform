@@ -1,0 +1,231 @@
+# GitLab Values - Optimized for Single t3a.large Node
+global:
+  hosts:
+    domain:
+    gitlab:
+      name:
+  https: false
+  ingress:
+    enabled: true
+    class: nginx
+    configureCertmanager: false
+    tls:
+      enabled: false
+  
+  kas:
+    enabled: false
+  
+  psql:
+    database: gitlab
+  
+  pages:
+    enabled: false
+  
+  # Email configuration
+  email:
+    from: 'gitlab@example.com'
+    reply_to: 'noreply@example.com'
+  
+  time_zone: UTC
+
+# Disable cert-manager
+certmanager:
+  install: false
+
+certmanager-issuer:
+  email: youremail@domain.com
+
+# NGINX Ingress
+nginx-ingress:
+  enabled: true
+  controller:
+    replicaCount: 1
+    service:
+      type: NodePort
+      nodePorts:
+        http: 30080
+        https: 30443
+    config:
+      use-forwarded-headers: "true"
+      compute-full-forwarded-for: "true"
+      ssl-redirect: "false"
+      force-ssl-redirect: "false"
+      proxy-real-ip-cidr: "10.0.0.0/16"
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+      limits:
+        memory: 512Mi
+
+# PostgreSQL
+postgresql: 
+  install: true 
+  image: 
+    registry: docker.io 
+    repository: postgres
+    tag: "16-alpine"
+  auth:
+    username: gitlab
+    password: "" 
+    postgresPassword: ""
+  primary: 
+    resources: 
+      requests: 
+        cpu: 100m
+        memory: 512Mi 
+      limits: 
+        memory: 1Gi 
+    persistence: 
+      size: 8Gi 
+      storageClass: gp2
+  metrics: 
+    enabled: false
+
+# Redis
+redis:
+  install: true
+  master:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+      limits:
+        memory: 512Mi
+    persistence:
+      size: 5Gi
+      storageClass: gp2
+
+  image:
+    repository: library/redis
+    tag: "latest"
+
+  metrics:
+    enabled: false
+
+
+# MinIO
+minio:
+  install: true
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+  persistence:
+    size: 10Gi
+    storageClass: gp2
+
+# GitLab Runner
+gitlab-runner:
+  install: true
+  replicas: 1
+  concurrent: 2
+  checkInterval: 10
+  gitlabUrl: http://gitlab-webservice-default.gitlab.svc.cluster.local:8080
+  rbac:
+    create: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+  runners:
+    config: |
+      [[runners]]
+        [runners.kubernetes]
+          namespace = "{{.Release.Namespace}}"
+          image = "ubuntu:22.04"
+          privileged = false
+          cpu_request = "100m"
+          memory_request = "256Mi"
+
+# Container Registry
+registry:
+  enabled: false
+
+# Prometheus
+prometheus:
+  install: false
+
+# Grafana
+grafana:
+  enabled: false
+
+# GitLab Core Components
+gitlab:
+  webservice:
+      workhorse:
+        trustedCIDRs:
+          - 0.0.0.0/0
+
+  # Gitaly
+  gitaly:
+    persistence:
+      size: 50Gi
+      storageClass: gp2
+    resources:
+      requests:
+        cpu: 50m
+        memory: 512Mi
+      limits:
+        memory: 1Gi
+  
+  # GitLab Shell
+  gitlab-shell:
+    minReplicas: 1
+    maxReplicas: 1
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        memory: 256Mi
+  
+  # Webservice
+  webservice:
+    minReplicas: 1
+    maxReplicas: 1
+    resources:
+      requests:
+        cpu: 150m
+        memory: 1Gi
+      limits:
+        memory: 2Gi
+    workerProcesses: 2
+  
+  # Sidekiq
+  sidekiq:
+    minReplicas: 1
+    maxReplicas: 1
+    resources:
+      requests:
+        cpu: 100m 
+        memory: 1Gi
+      limits:
+        memory: 1.5Gi
+  
+  # Migrations
+  migrations:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        memory: 1Gi
+
+  gitlab-exporter:
+    enabled: false  
+    
+# Shared Secrets
+shared-secrets:
+  enabled: true
+  rbac:
+    create: true
+
+# Upgrade Check
+upgradeCheck:
+  enabled: false
