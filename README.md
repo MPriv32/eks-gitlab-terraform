@@ -15,8 +15,6 @@ This repository contains Terraform modules and Helm configurations to deploy Git
 - **S3 Remote Backend**: Terraform state management with S3 backend
 - **Security Groups**: Granular network policies for ALB-to-node and inter-service communication
 
-The infrastructure is designed for cost-effective, single-node deployments with HTTP-only access through an Application Load Balancer.
-
 ## Prerequisites
 
 - Terraform >= 1.0
