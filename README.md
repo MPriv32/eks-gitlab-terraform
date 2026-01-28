@@ -21,9 +21,7 @@ This repository contains Terraform modules and Helm configurations to deploy Git
 - kubectl >= 1.27
 - AWS CLI >= 2.0
 - Helm >= 3.0
-- AWS account with EKS permissions
-- Existing VPC with subnets
-- Configured AWS credentials
+- AWS account with required permissions
 
 ## Usage
 
