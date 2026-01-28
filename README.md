@@ -17,7 +17,7 @@ This repository contains Terraform modules and Helm configurations to deploy Git
 
 ## Prerequisites
 
-- Terraform >= 1.0
+- Terraform >= 1.14
 - kubectl >= 1.27
 - AWS CLI >= 2.0
 - Helm >= 3.0
