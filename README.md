@@ -90,16 +90,3 @@ postgresql:
   auth:
     database: gitlab
 ```
-
-### NodePort Configuration
-
-ALB routes to NodePort 30080:
-
-```yaml
-nginx-ingress:
-  controller:
-    service:
-      type: NodePort
-      nodePorts:
-        http: 30080
-```
