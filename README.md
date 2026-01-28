@@ -12,7 +12,7 @@ This repository contains Terraform modules and Helm configurations to deploy Git
 - **EBS CSI Driver**: AWS EKS addon with IAM roles for dynamic persistent volume provisioning
 - **AWS Load Balancer Controller**: Helm-deployed controller with IAM Roles for Service Accounts (IRSA)
 - **Istio Service Mesh**: Mutual TLS (mTLS) encryption for secure pod-to-pod communication
-- **S3 Remote Backend**: Terraform state management with S3 backend and DynamoDB locking
+- **S3 Remote Backend**: Terraform state management with S3 backend
 - **Security Groups**: Granular network policies for ALB-to-node and inter-service communication
 
 The infrastructure is designed for cost-effective, single-node deployments with HTTP-only access through an Application Load Balancer.
