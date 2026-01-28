@@ -1,4 +1,4 @@
-# EKS GitLab Infrastructure
+# Enterprise GitLab on AWS EKS with Istio mTLS
 
 Infrastructure as Code for deploying a self-hosted GitLab instance on Amazon EKS.
 
@@ -6,11 +6,14 @@ Infrastructure as Code for deploying a self-hosted GitLab instance on Amazon EKS
 
 This repository contains Terraform modules and Helm configurations to deploy GitLab on AWS EKS. The setup includes:
 
-- **EKS Cluster**: Single-node Kubernetes cluster (t3a.large)
-- **GitLab**: Deployed via Helm chart v9.0.0
-- **PostgreSQL**: Official postgres:16-alpine image
-- **NGINX Ingress**: NodePort service for ALB integration
-- **Storage**: EBS volumes for persistent data
+- **EKS Cluster**: Single-node Kubernetes cluster (t3a.large) with OIDC provider
+- **VPC Infrastructure**: Custom VPC with public/private subnets across 2 AZs, NAT gateway, and DNS support
+- **Application Load Balancer (ALB)**: Internet-facing ALB with target groups for external access
+- **EBS CSI Driver**: AWS EKS addon with IAM roles for dynamic persistent volume provisioning
+- **AWS Load Balancer Controller**: Helm-deployed controller with IAM Roles for Service Accounts (IRSA)
+- **Istio Service Mesh**: Mutual TLS (mTLS) encryption for secure pod-to-pod communication
+- **S3 Remote Backend**: Terraform state management with S3 backend and DynamoDB locking
+- **Security Groups**: Granular network policies for ALB-to-node and inter-service communication
 
 The infrastructure is designed for cost-effective, single-node deployments with HTTP-only access through an Application Load Balancer.
 

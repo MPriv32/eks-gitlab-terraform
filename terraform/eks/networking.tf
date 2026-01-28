@@ -121,23 +121,6 @@ resource "aws_autoscaling_attachment" "gitlab_asg" {
   lb_target_group_arn    = aws_lb_target_group.gitlab_nginx.arn
 }
 
-# Add listener rule for /gitlab path
-# resource "aws_lb_listener_rule" "gitlab" {
-#   listener_arn = aws_lb_listener.http.arn
-#   priority     = 100
-
-#   action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.gitlab_nginx.arn
-#   }
-
-#   condition {
-#     path_pattern {
-#       values = ["/gitlab", "/gitlab/*"]
-#     }
-#   }
-# }
-
 # Allow ALB to reach worker nodes on NodePort
 resource "aws_security_group_rule" "alb_to_nodes" {
   type                     = "ingress"
